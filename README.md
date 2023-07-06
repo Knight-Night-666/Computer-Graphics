@@ -15,6 +15,14 @@ move to an unoccupied corner. The movement of players is illustrated through k s
 user command, and the game can be viewed from various camera angles in a graphics window.
 For more details refer to the report [here](3D_Model_Manipulation/CG_Report.pdf).
 
+Instructions to run:
+
+```$ npm install $```
+
+```$ npx vite $```
+
+```Open the localhost link that shows up in the terminal.```
+
 ## Custom Lighting Shaders:
 I have implemented the following shading models from scratch using just GLSL (without any third party libraries like Three.Js):
 - Phong Model
