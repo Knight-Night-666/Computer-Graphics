@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { dynamiccamera } from '.';
 export class Pendulum
 {
     pendulum: THREE.Object3D<THREE.Event>; 
@@ -14,7 +15,8 @@ export class Pendulum
     bob_x:any;
     bob_y:any;
     bob_z:any;
-	constructor(setVert,setFrag,U,x,y,z) 
+    sphere:any;
+	constructor(x,y,z) 
 	{
        //bob
        this.wo = Math.PI/2
@@ -23,35 +25,30 @@ export class Pendulum
        this.theta = 0;
        this.speed= 0
        const radius = 50
-       var sphere = new THREE.Mesh( 
+       this.sphere = new THREE.Mesh( 
            new THREE.SphereGeometry(radius, 50, 50), 
-           new THREE.ShaderMaterial({
-               vertexShader  : setVert,
-               fragmentShader : setFrag,
-               uniforms : U
-       }) );
-       sphere.position.set(x,y,z)
-    //    sphere.position.x = x
-    //    sphere.position.y = y
-    //    sphere.position.z = z
-       //rod
+           new THREE.MeshStandardMaterial( { color: 0xff0000 } ) );
+       this.sphere.position.set(x,y,z)
+       this.sphere.add(dynamiccamera)
+       dynamiccamera.position.set(0,200,0)
+
       
        const length = 200
        this.plen = length
        const geometry = new THREE.CylinderGeometry( 2, 2, length, 50 );
        const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
        const rod = new THREE.Mesh( geometry, material );
-       rod.position.set(sphere.position.x,sphere.position.y+length/2+radius,sphere.position.z)
+       rod.position.set(this.sphere.position.x,this.sphere.position.y+length/2+radius,this.sphere.position.z)
        let Pendulum = new THREE.Object3D()
        this.origin = [rod.position.x, rod.position.y+length/2, rod.position.z]
        rod.translateX(-this.origin[0])
        rod.translateY(-this.origin[1])
        rod.translateZ(-this.origin[2])
-       sphere.translateX(-this.origin[0])
-       sphere.translateY(-this.origin[1])
-       sphere.translateZ(-this.origin[2])
+       this.sphere.translateX(-this.origin[0])
+       this.sphere.translateY(-this.origin[1])
+       this.sphere.translateZ(-this.origin[2])
        Pendulum.add(rod)
-       Pendulum.add(sphere)
+       Pendulum.add(this.sphere)
        this.pendulum = Pendulum
        this.pendulum.translateX(this.origin[0])
        this.pendulum.translateY(this.origin[1])
@@ -63,6 +60,8 @@ export class Pendulum
        this.bob_y = y
        this.bob_z = z
 	}
-    ApplyPhysics() {
+    ApplyPhysics(gravity,max_angle) {
+        this.gravity = gravity
+        this.wo = max_angle
     }
 }

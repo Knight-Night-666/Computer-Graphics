@@ -7,6 +7,12 @@ uniform vec4 Coefs;
 uniform vec3 viewSrc;
 varying vec3 ldir;
 varying vec2 vertexUV; //u v of 3d to 2d map essentially. overlay unwrapped 3d on 2d and then just see u,v of pixel
+
+uniform vec3 spotLightPosition;
+uniform vec3 spotLightColor;
+uniform float spotLightAngle;
+uniform float spotLightIntensity;
+
 void main() {
     //params
     vec3 lighting = vec3(0.0, 0.0, 0.0);
@@ -37,6 +43,25 @@ void main() {
     //model texture and lighting multiplication
     vec3 modelColor = texture2D(checkerTexture,vertexUV).xyz;
     vec3 color = modelColor * lighting;
+    
+
+    // spotlight
+    // calculate the distance between the fragment and the spotlight
+    vec3 spotDirection = normalize(spotLightPosition - vertPos);
+    float spotDistance = length(spotLightPosition - vertPos);
+
+    // calculate the angle between the fragment and the spotlight
+    float spotCosine = dot(spotDirection, normalize(-normal));
+
+    // calculate the spotlight intensity based on the angle and distance
+    float spotIntensity = 0.0;
+    if (spotCosine > cos(spotLightAngle)) {
+      spotIntensity = pow(max(0.0, spotCosine), 10.0) * spotLightIntensity / spotDistance;
+    }
+
+    // calculate the final color of the fragment
+    lightColor = spotLightColor * spotIntensity;
+    color = color * lightColor;
     gl_FragColor = vec4(color,1.0f);
 } 
                           
