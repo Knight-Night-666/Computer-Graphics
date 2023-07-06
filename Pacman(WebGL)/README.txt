@@ -1,6 +1,7 @@
 DEMO LINK: https://drive.google.com/file/d/1avjX442EO-RGbSZGlrrgBtVqIY7kPY5h/view?usp=sharing
 INSTRUCTIONS TO USE:
-simply run the index.html in a live server and play the game!
+- Go into the Source_code folder
+- Simply run the index.html in a live server and play the game!
 
 The arrow keys control the movement.
 The key 'c'  will switch between the maps.
